@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>/usr/share/dict/words autocomplete example</title>
+	<style>
+		html, body { margin:0; padding:0; height: 100%; }
+		body * {
+			margin: 20px; padding: 8px;
+			font-size: 18px;
+			border: 2px solid gray; border-radius: 5px;
+		}
+		input { width: 30%; background-color: rgba(255,0,0,.2); }
+		pre { min-height: 75%; background-color: rgba(0,0,0,.2); }
+	</style>
+</head>
+
+<body>
+	<input type="text" name="input">
+	<pre></pre>
+</body>
+<script>
+
+	function mitigate(f, d) {
+		return function(e) {
+			clearTimeout(f.t);
+			f.t = setTimeout(function() { f(e); }, d);
+		};
+	}
+
+	var input = document.querySelector('input'),
+		pre = document.querySelector('pre');
+
+	input.onkeyup = mitigate(function(e) {
+		var req = new XMLHttpRequest();
+		req.open("GET", "/autocomplete?input="+encodeURIComponent(input.value), false);
+		req.send();
+		pre.innerHTML = req.responseText;
+	}, 100);
+
+</script>
+</html>
